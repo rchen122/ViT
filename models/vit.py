@@ -17,9 +17,9 @@ class PatchEmbedding(nn.Module):
 		self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_size))
 		self.pos_embedding = nn.Parameter(torch.zeros(1, self.num_patches+1, embed_size))
 		
-		nn.init.trunc_normal_(self.pos_embed, std=0.02)
+		nn.init.trunc_normal_(self.pos_embedding, std=0.02)
 		nn.init.trunc_normal_(self.cls_token, std=0.02)
-		nn.init.kaiming_normal_(self.proj.weight, mode='fan_out', nonlinearity='relu')
+		# nn.init.kaiming_normal_(self.proj.weight, mode='fan_out', nonlinearity='relu')
 
 	def forward(self, x): #need to convert [B, 3, 32, 32] to [B, num_patches + 1, embed_size]
 		x = self.conv1(x) # [B, embed_size, 8, 8]

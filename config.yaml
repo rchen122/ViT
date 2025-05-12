@@ -1,0 +1,12 @@
+train:
+  epochs: 100
+  save_dst: 'logs/checkpoint.pth'
+model:
+  num_class: 100
+  img_size: 32
+  patch_size: 4
+  in_channel: 3
+  embed_size: 256
+  num_heads: 8
+  depth: 8
+  dropout: 0.1
