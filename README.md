@@ -11,6 +11,6 @@ python test.py --config config.yaml --load-model 'model path'
 Current Status: 
 Finished Training on 100 epochs on the dataset with model parameters in logs/checkpoint_100.pth.
 Training Loss = 0.1621, and testing loss is 2.4870 and testing accuracy is 55.10% 
-Results indicate the need for further training. Next steps is to train again with more epochs to lower loss. 
+Results indicate that the model is over fitting the dataset (low training loss, high testing loss). Need either data augmentation, regularization, or model improvements. 
 
 
