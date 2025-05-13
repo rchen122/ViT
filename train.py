@@ -5,7 +5,7 @@ import torchvision
 from models import vit
 import argparse
 import yaml
-
+import torchvision.transforms as transforms
 
 def train_loop(config, load_model):
 	train_config = config["train"]
@@ -52,14 +52,24 @@ def train_loop(config, load_model):
 				'loss': loss,
 				'optimizer_state_dict': optimizer.state_dict()
 			}, dst)
+		if epoch % 25 == 0: # every 25 runs:
+			torch.save({
+				'epoch': epoch,
+				'model_state_dict': model.state_dict(),
+				'loss': loss,
+				'optimizer_state_dict': optimizer.state_dict()
+			}, f'experiments/run2/{str(epoch)}_checkpoint')
 
 
 def trainLoader():
-	transform = torchvision.transforms.Compose([
-		torchvision.transforms.RandomHorizontalFlip(),
-		torchvision.transforms.RandomCrop(32, padding=4),
-		torchvision.transforms.ToTensor(),
-		torchvision.transforms.Normalize((0.5071, 0.4865, 0.4409), (0.2673, 0.2564, 0.2761))  # CIFAR-100 stats
+	transform = transforms.Compose([
+		transforms.RandomHorizontalFlip(),
+		transforms.RandomCrop(32, padding=4),
+		transforms.ColorJitter(0.4, 0.4, 0.4, 0.1),
+		transforms.AutoAugment(policy=transforms.AutoAugmentPolicy.CIFAR10),
+		transforms.ToTensor(),
+		transforms.Normalize((0.5071, 0.4865, 0.4409), (0.2673, 0.2564, 0.2761)),  # CIFAR-100 stats
+		transforms.RandomErasing(p=0.25)
 	])
 	train_dataset = torchvision.datasets.CIFAR100(root='dataset/', train=True, download=False, transform=transform)
 	train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=64, shuffle=True, num_workers=2)
