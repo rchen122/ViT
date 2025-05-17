@@ -1,6 +1,6 @@
 train:
-  epochs: 250
-  save_dst: 'logs/run2/best_checkpoint.pth'
+  epochs: 351
+  save_dst: 'logs/run3/best_checkpoint.pth'
 model:
   num_class: 100
   img_size: 32

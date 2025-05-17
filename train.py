@@ -6,18 +6,24 @@ from models import vit
 import argparse
 import yaml
 import torchvision.transforms as transforms
+from torch.optim.lr_scheduler import CosineAnnealingLR
+
 
 def train_loop(config, load_model):
 	train_config = config["train"]
 	model_config = config["model"]
+	epochs = train_config['epochs']
+
 	device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 	model = vit.ViT(**model_config)
 	model.train()
 	model.to(device)
 
-	loss_fn = torch.nn.CrossEntropyLoss()
+	loss_fn = torch.nn.CrossEntropyLoss(label_smoothing=0.1)
 	optimizer = torch.optim.AdamW(model.parameters(), lr=3e-4, weight_decay=0.05)
+	scheduler = CosineAnnealingLR(optimizer, T_max=epochs)  
+
 
 	if load_model:
 		checkpoint = torch.load(load_model)
@@ -29,7 +35,6 @@ def train_loop(config, load_model):
 		min_loss = torch.inf
 		epoch_start = 0
 
-	epochs = train_config['epochs']
 	dst = train_config['save_dst']
 	print("Starting Training Loop")
 	for epoch in range(epoch_start, epochs):
@@ -41,6 +46,7 @@ def train_loop(config, load_model):
 			optimizer.zero_grad()
 			loss.backward()
 			optimizer.step()
+			scheduler.step()
 			running_loss += loss.item()
 		avg_loss = running_loss / len(train_loader)
 		print(f"Epoch [{epoch+1}/{epochs}], Loss: {avg_loss:.4f}")
@@ -58,7 +64,7 @@ def train_loop(config, load_model):
 				'model_state_dict': model.state_dict(),
 				'loss': loss,
 				'optimizer_state_dict': optimizer.state_dict()
-			}, f'experiments/run2/{str(epoch)}_checkpoint')
+			}, f'experiments/run3/{str(epoch)}_checkpoint')
 
 
 def trainLoader():
