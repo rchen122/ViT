@@ -19,12 +19,12 @@ Results indicate that the model is over fitting the dataset (low training loss, 
 
 Run 2: Increased Data Augmentation for smaller dataset training and increased dropout rate (0.1 to 0.2), increased epochs
 
-<img src="Test_Accuracy_Run_2.png" width=45% height=50%> <img src="Train%20and%20Test%20Loss%20Run%202.png" width=45% height=50%>
+<img src="outputs/Test_Accuracy_Run_2.png" width=45% height=50%> <img src="outputs/Train%20and%20Test%20Loss%20Run%202.png" width=45% height=50%>
 
 While Train Loss consistently decreased with epochs, test loss began to stagnant at around 100 epoch. Test accuracy consistently improved with each epoch with a logarithmic behavior. Further epoch training might see limited improvement with current parameters. Test accuracy increased from 55.1% in baseline run to 65.65%, which is significant improvement and is in the competitive range for ViT on CIFAR-100 from scratch. At epoch=100, test accuracy was 61.69%, which shows the effectiveness of the changes at the same epoch length. 
 
 Run 3: Learning Rate Scheduling and Label Smoothing, further increased epochs
-<img src="Train_Test_Loss_Run_3.png" width=45% height=50%> <img src="Test_Accuracy_Run_3.png" width=45% height=50%>
+<img src="outputs/Train_Test_Loss_Run_3.png" width=45% height=50%> <img src="outputs/Test_Accuracy_Run_3.png" width=45% height=50%>
 
 Run 3 resulted in slightly higher losses and lower accuracy in early training, but showed a slight improvement in test accuracy of 65.96% at 250 epochs. Further training up to 350 epochs resulted in an increased final accuracy of 67.57%.
 
